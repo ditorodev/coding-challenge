@@ -1,12 +1,7 @@
 import supertest from 'supertest'
-import mongoose from 'mongoose'
 import { app } from '../index'
 
 const request = supertest(app)
-
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true }).then(() => {
-    console.warn('Connected!')
-})
 
 describe('APARTMENTS API', () => {
     it('should create an apartment', async done => {
@@ -24,4 +19,15 @@ describe('APARTMENTS API', () => {
         expect(body.statusCode).toEqual(201)
         done()
     }, 60000) // timeout is 60s bc internet in venezuela is slow af :( and im using mongo atlas for simplicity
+
+    it('should error with 400 because of missing argument', async done => {
+        const obj = {}
+        const res = await request.post('/apartments').send(obj)
+        const body = res.body
+
+        expect(body.statusCode).toBe(400)
+        expect(body.data.message).toContain('Missing argument')
+
+        done()
+    })
 })

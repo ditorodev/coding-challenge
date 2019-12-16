@@ -33,6 +33,6 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],
-    "timeout": 60000
+    "setupTestFrameworkScriptFile": "<rootDir>src/tests/setup.js"
   }
 }
