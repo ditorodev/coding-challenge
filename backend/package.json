@@ -33,6 +33,6 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>src/tests/setup.js"
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"]
   }
 }

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import Apartment from '../src/models/apartment'
 
-beforeAll(async done => {
+beforeAll(() => {
     mongoose
         .connect(
             process.env.MONGO_URI +
@@ -12,10 +12,10 @@ beforeAll(async done => {
         )
         .then(() => {
             console.warn('[MONGO] Connected!')
+            // done()
         })
-    done()
 })
 
-afterAll(async done => {
-    await Apartment.deleteMany()
+afterAll(() => {
+    Apartment.deleteMany()
 })
