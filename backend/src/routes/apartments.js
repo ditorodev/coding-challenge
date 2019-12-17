@@ -39,5 +39,19 @@ router.post('/', async (req, res) => {
 
     return res.json(response)
 })
+/*
+ * Get all apartments
+ * */
+router.get('/', async (req, res) => {
+    Apartment.find({}, (error, apartments) => {
+        if (apartments && apartments.length > 0) {
+            const response = responseFactory(200, { apartments })
+            return res.json(response)
+        } else {
+            const response = responseFactory(404, { message: error })
+            return res.json(response)
+        }
+    })
+})
 
 export default router

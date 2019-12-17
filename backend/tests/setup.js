@@ -12,10 +12,6 @@ beforeAll(() => {
         )
         .then(() => {
             console.warn('[MONGO] Connected!')
-            // done()
+            mongoose.connection.dropDatabase()
         })
-})
-
-afterAll(() => {
-    Apartment.deleteMany()
 })
