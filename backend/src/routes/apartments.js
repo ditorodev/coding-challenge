@@ -58,17 +58,16 @@ router.get('/', async (req, res) => {
             }
         }, {})
 
-        Apartment.find(mongoFilters, (err, apartment) => {
+        Apartment.find(mongoFilters, (err, apartments) => {
             let response
-            if (err && !apartment) {
+            if (err && !apartments) {
                 response = responseFactory(404, {
                     message: 'Apartments not found',
                     error: err,
                 })
-            } else if (apartment) {
-                console.warn(apartment)
+            } else if (apartments) {
                 response = responseFactory(202, {
-                    apartment,
+                    apartments,
                 })
             } else if (err) {
                 response = responseFactory(500, {

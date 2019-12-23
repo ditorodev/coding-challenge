@@ -12,7 +12,7 @@ describe('APARTMENTS API', () => {
         expect(res.status).toEqual(404)
         expect(body.data.message).toBeDefined()
         done()
-    }, 60000)
+    })
 
     it('should create an apartment', async done => {
         const obj = {
@@ -29,7 +29,7 @@ describe('APARTMENTS API', () => {
         expect(res.status).toEqual(201)
         expect(body.data.message).toBeDefined()
         done()
-    }, 60000) // timeout is 60s bc internet in venezuela is slow af :( and im using mongo atlas for simplicity
+    }) // timeout is 60s bc internet in venezuela is slow af :( and im using mongo atlas for simplicity
 
     it('should error because of missing argument', async done => {
         const obj = {}
@@ -63,7 +63,7 @@ describe('APARTMENTS API', () => {
         expect(body.data.apartment._id).toEqual(_id)
 
         done()
-    }, 60000)
+    })
 
     it('should give error with apartment not found', async done => {
         const _id = 1
@@ -74,7 +74,7 @@ describe('APARTMENTS API', () => {
         expect(body.data.apartment).not.toBeDefined()
 
         done()
-    }, 60000)
+    })
 
     it('should correctly filter by price', async done => {
         const obj = {
@@ -105,17 +105,30 @@ describe('APARTMENTS API', () => {
         const body = res.body
 
         expect(res.status).toEqual(202)
-        expect(body.apartment[0].price).toBeGreaterThanOrEqual(100)
-        expect(body.apartment[0].price).toBeLessThanOrEqual(800)
+        expect(body.apartments[0].price).toBeGreaterThanOrEqual(100)
+        expect(body.apartments[0].price).toBeLessThanOrEqual(800)
 
         done()
-    }, 60000)
+    })
 
     it('should get all apartments', async done => {
+        const obj = {
+            price: 100,
+            sqm: 10,
+            title: 'Test Apartment',
+            number_bathrooms: 2,
+            number_bedrooms: 2,
+            coords: { lat: 10, lon: 200 },
+        }
+        await request.post('/apartments').send(obj)
+        obj.price = 1303
+        await request.post('/apartments').send(obj)
+
         const res = await request.get('/apartments/all')
         const body = res.body
         expect(res.status).toEqual(200)
         expect(body.data.apartments).toBeDefined()
+        expect(body.data.apartments.length).toEqual(2)
         done()
-    }, 60000)
+    })
 })
