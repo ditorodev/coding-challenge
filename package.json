@@ -6,6 +6,7 @@
   "author": "Juan Di Toro <ditorojuanf@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "qs": "^6.9.1"
   }
 }

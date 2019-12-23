@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
-import Apartment from '../src/models/apartment'
 
-beforeAll(() => {
+beforeEach(() => {
     mongoose
         .connect(
             process.env.MONGO_URI +
@@ -11,7 +10,6 @@ beforeAll(() => {
             { useNewUrlParser: true }
         )
         .then(() => {
-            console.warn('[MONGO] Connected!')
             mongoose.connection.dropDatabase()
         })
 })

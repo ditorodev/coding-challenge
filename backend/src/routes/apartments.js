@@ -1,9 +1,11 @@
 import express from 'express'
 import Apartment from '../models/apartment'
-import { responseFactory } from '../utils'
+import { responseFactory, resolveOperator } from '../utils'
 
 const router = express.Router()
-
+/*
+ * Create an apartment
+ * */
 router.post('/', async (req, res) => {
     const {
         title,
@@ -27,31 +29,106 @@ router.post('/', async (req, res) => {
 
     const response = await apartment
         .save()
-        .then(() => {
+        .then(apartment => {
             return responseFactory(201, {
                 message: 'Apartment created successfully',
+                apartment,
             })
         })
         .catch(err => {
             console.error('[Apartments] ', err)
             return responseFactory(400, { message: 'Missing argument ', err })
         })
-
-    return res.json(response)
+    return res.status(response.statusCode).json({ data: response.data })
 })
+
+router.get('/', async (req, res) => {
+    const { body } = req
+    if (body) {
+        const { filters } = body
+        const mongoFilters = filters.reduce((acc, filter) => {
+            const { operator, field, value } = filter
+            const mongoOperator = resolveOperator(operator)
+            return {
+                ...acc,
+                [field]: {
+                    ...acc[field],
+                    [mongoOperator]: Number(value),
+                },
+            }
+        }, {})
+
+        Apartment.find(mongoFilters, (err, apartment) => {
+            let response
+            if (err && !apartment) {
+                response = responseFactory(404, {
+                    message: 'Apartments not found',
+                    error: err,
+                })
+            } else if (apartment) {
+                console.warn(apartment)
+                response = responseFactory(202, {
+                    apartment,
+                })
+            } else if (err) {
+                response = responseFactory(500, {
+                    message: 'Internal Error',
+                    error: err,
+                })
+            }
+
+            return res.status(response.statusCode).json(response.data)
+        })
+    }
+})
+
 /*
  * Get all apartments
  * */
-router.get('/', async (req, res) => {
+router.get('/all', async (req, res) => {
     Apartment.find({}, (error, apartments) => {
+        let response
         if (apartments && apartments.length > 0) {
-            const response = responseFactory(200, { apartments })
-            return res.json(response)
+            response = responseFactory(200, {
+                apartments,
+            })
         } else {
-            const response = responseFactory(404, { message: error })
-            return res.json(response)
+            response = responseFactory(404, { message: error })
         }
+
+        return res.status(response.statusCode).json({ data: response.data })
     })
 })
+
+/*
+ * Get apartment by ID
+ * */
+router.get('/:id', async (req, res) => {
+    Apartment.findById(req.params.id, (err, apartment) => {
+        let response
+        if (err && !apartment) {
+            response = responseFactory(404, {
+                message: 'Apartment not found',
+            })
+        } else if (err) {
+            response = responseFactory(500, {
+                message: 'Internal Error',
+                error: err,
+            })
+        } else if (apartment) {
+            response = responseFactory(202, {
+                apartment,
+            })
+        }
+
+        return res.status(response.statusCode).json({ data: response.data })
+    })
+})
+
+/*
+ * Updates one apartment
+ * */
+
+// TODO
 
 export default router
