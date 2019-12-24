@@ -7,7 +7,12 @@ const Header = () => {
     return (
         <motion.header className="Header">
             <Logo />
-            <h2>Filter</h2>
+            <motion.h2 whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }}>
+                Filter
+            </motion.h2>
+            <motion.h2 whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }}>
+                Menu
+            </motion.h2>
         </motion.header>
     )
 }

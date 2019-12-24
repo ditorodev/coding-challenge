@@ -7,6 +7,10 @@
     justify-content: space-between;
     background-color: var(--accent-1);
     box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .07);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
 
 .Header svg {

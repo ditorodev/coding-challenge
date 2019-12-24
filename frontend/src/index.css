@@ -51,10 +51,11 @@ table {
 
 :root {
   /* COLORS */
-  --white: #F1FFFA;
+  /*--white: #F1FFFA;*/
+  --white: #FFFDF2;
   --black: #1F271B;
   --accent-1: #FED766;
-  --accent-0: #CCFCCB;
+  --link: #334063;
   --error: #FE5F55;
   --success: #4EE889;
 
