@@ -60,12 +60,7 @@ router.get('/', async (req, res) => {
 
         Apartment.find(mongoFilters, (err, apartments) => {
             let response
-            if (err && !apartments) {
-                response = responseFactory(404, {
-                    message: 'Apartments not found',
-                    error: err,
-                })
-            } else if (apartments) {
+            if (apartments) {
                 response = responseFactory(202, {
                     apartments,
                 })
@@ -123,11 +118,5 @@ router.get('/:id', async (req, res) => {
         return res.status(response.statusCode).json({ data: response.data })
     })
 })
-
-/*
- * Updates one apartment
- * */
-
-// TODO
 
 export default router

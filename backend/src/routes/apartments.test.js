@@ -111,6 +111,24 @@ describe('APARTMENTS API', () => {
         done()
     })
 
+    it('should give empty array while filtering by price ', async done => {
+        const filters = [
+            {
+                field: 'price',
+                value: 2000,
+                operator: '>',
+            },
+        ]
+        const query = qs.stringify({ filters })
+        const res = await request.get('/apartments/').send(query)
+        const body = res.body
+
+        expect(res.status).toEqual(202)
+        expect(body.apartments.length).toBe(0)
+
+        done()
+    })
+
     it('should get all apartments', async done => {
         const obj = {
             price: 100,
