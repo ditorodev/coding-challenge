@@ -1,5 +1,6 @@
 .Header {
     width: 100%;
+    max-width: 100vw;
     height: 60px;
     display: flex;
     flex-direction: row;

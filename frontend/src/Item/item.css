@@ -34,7 +34,7 @@
     background-color: rgba(255,255,255, .8);
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: calc(100% - 20px);
     padding: 10px;
 }
 
@@ -66,4 +66,15 @@
 
 .Item__property svg {
     margin-right: 5px;
+}
+
+@media (min-width: 768px) {
+    .Item {
+        min-height: 250px;
+        /*max-height: 250px;*/
+        /*width: calc(40% - 20px);*/
+        /*max-width: calc(350px - 20px);*/
+        margin: 10px;
+        flex: 0 0 calc(30% - 20px);
+    }
 }

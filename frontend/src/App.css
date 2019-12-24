@@ -1,8 +1,9 @@
 .App {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  max-width: 100vw;
   min-height: 100vh;
   background-color: var(--white);
   color: var(--black)
@@ -15,4 +16,19 @@
   width: 100%;
   height: 100%;
   padding-top: 80px;
+}
+
+@media (min-width: 768px) {
+  .App {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .App .items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*flex:1 1 auto;*/
+    /*justify-content: space-evenly;*/
+  }
+
 }
