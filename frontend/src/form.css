@@ -1,0 +1,30 @@
+.input__group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 20px);
+    padding: 10px;
+}
+
+.input__group.input__group--row {
+    flex-direction: row;
+}
+
+.input__group.input__group--column {
+    flex-direction: column;
+}
+
+.input__group h1 {
+    font-weight: bold;
+    font-size: calc(32px * .6);
+    align-self: flex-start;
+}
+
+.input__group input {
+    border: 1px solid rgba(0,0,0,0.2);
+    margin-left: 10px;
+    width: 80%;
+    border-radius: 3px;
+    font-size: 18px;
+    padding: 10px;
+}

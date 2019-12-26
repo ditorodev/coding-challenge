@@ -1,0 +1,23 @@
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(50% - 10px);
+    margin: 0 5px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: calc(32px * .5);
+    border: none;
+    outline: none;
+    padding: 10px;
+}
+
+.btn.btn--primary {
+    background-color: var(--accent-1);
+    color: var(--white);
+}
+
+.btn.btn--secondary {
+    background-color: var(--grey);
+    color: var(--accent-1)
+}
