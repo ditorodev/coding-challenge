@@ -61,7 +61,7 @@ router.get('/', async (req, res) => {
         Apartment.find(mongoFilters, (err, apartments) => {
             let response
             if (apartments) {
-                response = responseFactory(202, {
+                response = responseFactory(200, {
                     apartments,
                 })
             } else if (err) {
@@ -110,7 +110,7 @@ router.get('/:id', async (req, res) => {
                 error: err,
             })
         } else if (apartment) {
-            response = responseFactory(202, {
+            response = responseFactory(200, {
                 apartment,
             })
         }
