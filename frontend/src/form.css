@@ -29,3 +29,9 @@
     font-size: 18px;
     padding: 10px;
 }
+
+@media (max-width: 500px) {
+    .input__group.input__group--row {
+        flex-direction: column;
+    }
+}

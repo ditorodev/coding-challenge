@@ -4,6 +4,7 @@ import Header from './Header'
 import Item from './Item'
 import Modal from './Modal'
 import Filter from './Filter'
+import Create from './Create'
 
 import './App.css'
 
@@ -36,7 +37,7 @@ function App() {
                     isVisible={showCreate}
                     close={() => setShowCreate(false)}
                 >
-                    {({ close }) => <Filter close={close} />}
+                    {({ close }) => <Create close={close} />}
                 </Modal>
                 <div className="items">
                     <Item />

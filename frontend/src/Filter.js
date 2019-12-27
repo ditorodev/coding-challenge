@@ -54,7 +54,6 @@ const Filter = ({ close }) => {
         setLoading(true)
 
         req.then(data => {
-            console.warn(data)
             setLoading(false)
             // setApartments(data)
             close()

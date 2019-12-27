@@ -8,6 +8,7 @@
     left: 5%;
     width: 90vw;
     height: 90vh;
+    max-width: 500px;
     background-color: var(--white);
     box-shadow: 0 3px 40px 10px rgba(0,0,0,0.7);
     border-radius: 5px;
