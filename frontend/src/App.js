@@ -11,21 +11,30 @@ export const AppContext = React.createContext(null)
 
 function App() {
     const [showFilter, setShowFilter] = useState(false)
-    const [showMenu, setShowMenu] = useState(false)
+    const [showCreate, setShowCreate] = useState(false)
+    const [apartments, setApartments] = useState(null)
+
     return (
         <div className="App">
             <AppContext.Provider
                 value={{
                     showFilter: show => setShowFilter(show),
-                    showMenu: show => setShowMenu(show),
+                    showCreate: show => setShowCreate(show),
                     filterViewActive: showFilter,
-                    menuViewActive: showMenu,
+                    menuViewActive: showCreate,
+                    setApartments,
                 }}
             >
                 <Header />
                 <Modal
                     isVisible={showFilter}
                     close={() => setShowFilter(false)}
+                >
+                    {({ close }) => <Filter close={close} />}
+                </Modal>
+                <Modal
+                    isVisible={showCreate}
+                    close={() => setShowCreate(false)}
                 >
                     {({ close }) => <Filter close={close} />}
                 </Modal>

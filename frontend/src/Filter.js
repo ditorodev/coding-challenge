@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useForm } from 'react-hook-form'
-import qs from 'qs'
 
 import api from './api'
 
 import './Filter.css'
 import './button.css'
 import './form.css'
+import './Modal.css'
 
 function buildFilterRequest(values) {
     const array = Object.keys(values).map(key => {
@@ -29,10 +29,10 @@ function buildFilterRequest(values) {
 }
 
 const Filter = ({ close }) => {
+    const [loading, setLoading] = useState(false)
     const { register, handleSubmit, watch } = useForm()
 
     const onSubmit = values => {
-        // console.warn(values)
         const data = {
             number_bedrooms: values.nRooms,
             price: {
@@ -45,20 +45,20 @@ const Filter = ({ close }) => {
             },
         }
 
-        console.warn(buildFilterRequest(data))
-
         const req = api.get('/apartments', {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             params: { filters: buildFilterRequest(data) },
         })
-        // const req = api.get('/apartments', {
-        //     headers: {
-        //         'Content-Type': 'application/x-www-form-urlencoded',
-        //     },
-        //     data: qs.stringify(buildFilterRequest(data)),
-        // })
+        setLoading(true)
+
+        req.then(data => {
+            console.warn(data)
+            setLoading(false)
+            // setApartments(data)
+            close()
+        })
     }
 
     return (
@@ -67,11 +67,11 @@ const Filter = ({ close }) => {
             method="POST"
             onSubmit={handleSubmit(onSubmit)}
         >
-            <div className="Filter__header">
+            <div className="Modal__header">
                 <h1>Filter</h1>
                 <FontAwesomeIcon icon={faTimes} onClick={close} />
             </div>
-            <div className="Filter__content">
+            <div className="Modal__content">
                 <div className="input__group input__group--column">
                     <h1>Price</h1>
                     <div className="input__group input__group--row">
@@ -144,7 +144,7 @@ const Filter = ({ close }) => {
                     +
                 </div>
             </div>
-            <div className="Filter__footer">
+            <div className="Modal__footer">
                 <button
                     className="btn btn--secondary"
                     onClick={e => {
@@ -155,7 +155,7 @@ const Filter = ({ close }) => {
                     Cancel
                 </button>
                 <button type="submit" className="btn btn--primary">
-                    Send
+                    {loading ? 'Loading...' : 'Send'}
                 </button>
             </div>
         </form>

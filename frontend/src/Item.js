@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBath, faBuilding, faBed } from '@fortawesome/free-solid-svg-icons'
 
-import './item.css'
+import './Item.css'
 
 const Item = ({ image }) => {
     return (
