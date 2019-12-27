@@ -102,10 +102,18 @@ router.get('/', async (req, res) => {
             }
         }, {})
         console.warn(mongoFilters)
-        Apartment.find(mongoFilters, (err, apartments) => {
+        Apartment.find(mongoFilters, async (err, apartments) => {
             let response
-            console.warn(apartments)
             if (apartments) {
+                apartments = await Promise.all(
+                    apartments.map(async apartment => {
+                        const images = await getImages(apartment._id)
+                        return {
+                            ...apartment._doc,
+                            images,
+                        }
+                    })
+                )
                 response = responseFactory(200, {
                     apartments,
                 })
