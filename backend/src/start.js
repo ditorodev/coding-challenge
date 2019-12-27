@@ -15,4 +15,6 @@ mongoose
         console.warn('Connected!')
     })
 
-app.listen(8001, () => console.log('Server started on http://localhost:8001!'))
+app.listen(process.env.PORT, () =>
+    console.log('Server started on http://localhost:8001!')
+)

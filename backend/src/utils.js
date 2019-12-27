@@ -34,10 +34,17 @@ export function resolveOperator(operator) {
  * */
 export async function getImages(id) {
     try {
-        const dirContent = await fs.readdir(__dirname + `/../../images/${id}/`)
+        const dirContent = await new Promise((resolve, reject) => {
+            fs.readdir(__dirname + `/../images/${id}/`, (err, files) => {
+                if (files) {
+                    resolve(files)
+                } else if (err) {
+                    resolve(err)
+                }
+            })
+        })
         const images = dirContent.map(image => {
-            console.warn(image)
-            return image
+            return `http://localhost:${process.env.PORT}/apartments/images/${id}/${image}`
         })
         return images
     } catch (err) {
