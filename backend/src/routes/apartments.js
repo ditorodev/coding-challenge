@@ -124,16 +124,18 @@ router.get('/', async (req, res) => {
  * Get all apartments
  * */
 router.get('/all', async (req, res) => {
-    Apartment.find({}, (error, apartments) => {
+    Apartment.find({}, async (error, apartments) => {
         let response
         if (apartments && apartments.length > 0) {
-            apartments = apartments.map(apartment => {
-                const images = getImages(apartment._id)
-                return {
-                    ...apartment._doc,
-                    images,
-                }
-            })
+            apartments = await Promise.all(
+                apartments.map(async apartment => {
+                    const images = await getImages(apartment._id)
+                    return {
+                        ...apartment._doc,
+                        images,
+                    }
+                })
+            )
             response = responseFactory(200, {
                 apartments,
             })
