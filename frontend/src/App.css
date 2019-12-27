@@ -20,7 +20,7 @@
 @media (min-width: 768px) {
   .App {
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .App .items {
