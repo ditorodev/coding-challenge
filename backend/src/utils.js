@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 export function responseFactory(statusCode, body) {
     return {
         statusCode,
@@ -23,5 +25,22 @@ export function resolveOperator(operator) {
             return '$lte'
         case '=':
             return '$eq'
+    }
+}
+/*
+ * Gets apartment images
+ * @param id<String> Apartment id from mongodb
+ * @return images[] Array of images
+ * */
+export async function getImages(id) {
+    try {
+        const dirContent = await fs.readdir(__dirname + `/../../images/${id}/`)
+        const images = dirContent.map(image => {
+            console.warn(image)
+            return image
+        })
+        return images
+    } catch (err) {
+        return []
     }
 }

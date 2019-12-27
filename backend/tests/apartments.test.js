@@ -117,6 +117,7 @@ describe('APARTMENTS API', () => {
 
         expect(res.status).toEqual(200)
         expect(body.data.apartment).toBeDefined()
+        expect(body.data.apartment.images).toBeDefined()
         expect(body.data.apartment._id).toEqual(_id)
 
         done()
@@ -198,13 +199,22 @@ describe('APARTMENTS API', () => {
         }
         await request.post('/apartments').send(obj)
         obj.price = 1303
-        await request.post('/apartments').send(obj)
+        await request
+            .post('/apartments')
+            .field('price', obj.price)
+            .field('sqm', obj.sqm)
+            .field('title', obj.title)
+            .field('number_bathrooms', obj.number_bathrooms)
+            .field('number_bedrooms', obj.number_bedrooms)
+            .attach('file', __dirname + '/test.jpg')
 
         const res = await request.get('/apartments/all')
         const body = res.body
+
         expect(res.status).toEqual(200)
         expect(body.data.apartments).toBeDefined()
         expect(body.data.apartments.length).toEqual(2)
+        expect(body.data.apartments[0].images).toBeDefined()
         done()
     })
 })

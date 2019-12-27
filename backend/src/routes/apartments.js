@@ -1,8 +1,9 @@
 import express from 'express'
 import Apartment from '../models/apartment'
 import fileUpload from 'express-fileupload'
+import fs from 'fs'
 
-import { responseFactory, resolveOperator } from '../utils'
+import { responseFactory, resolveOperator, getImages } from '../utils'
 
 const router = express.Router()
 
@@ -116,7 +117,7 @@ router.get('/', async (req, res) => {
 
             return res.status(response.statusCode).json(response.data)
         })
-    } else return res.status(500).send()
+    } else return res.status(400).send()
 })
 
 /*
@@ -126,6 +127,13 @@ router.get('/all', async (req, res) => {
     Apartment.find({}, (error, apartments) => {
         let response
         if (apartments && apartments.length > 0) {
+            apartments = apartments.map(apartment => {
+                const images = getImages(apartment._id)
+                return {
+                    ...apartment._doc,
+                    images,
+                }
+            })
             response = responseFactory(200, {
                 apartments,
             })
@@ -141,7 +149,7 @@ router.get('/all', async (req, res) => {
  * Get apartment by ID
  * */
 router.get('/:id', async (req, res) => {
-    Apartment.findById(req.params.id, (err, apartment) => {
+    Apartment.findById(req.params.id, async (err, apartment) => {
         let response
         if (err && !apartment) {
             response = responseFactory(404, {
@@ -153,8 +161,11 @@ router.get('/:id', async (req, res) => {
                 error: err,
             })
         } else if (apartment) {
+            const images = await getImages(apartment._id)
+            const _apartment = apartment._doc
+
             response = responseFactory(200, {
-                apartment,
+                apartment: { ..._apartment, images },
             })
         }
 
@@ -165,6 +176,6 @@ router.get('/:id', async (req, res) => {
 /*
  * Get image
  * */
-router.use(express.static(__dirname + '/../../images'))
+router.use('/images', express.static(__dirname + '/../../images'))
 
 export default router
