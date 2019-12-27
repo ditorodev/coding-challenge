@@ -43,9 +43,9 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
-    const { body } = req
-    if (body) {
-        const { filters } = body
+    const { query } = req
+    const { filters } = query
+    if (filters) {
         const mongoFilters = filters.reduce((acc, filter) => {
             const { operator, field, value } = filter
             const mongoOperator = resolveOperator(operator)
@@ -73,7 +73,7 @@ router.get('/', async (req, res) => {
 
             return res.status(response.statusCode).json(response.data)
         })
-    }
+    } else return res.status(500).send()
 })
 
 /*

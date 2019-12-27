@@ -101,7 +101,7 @@ describe('APARTMENTS API', () => {
         ]
 
         const query = qs.stringify({ filters })
-        const res = await request.get('/apartments/').send(query)
+        const res = await request.get('/apartments/').query(query)
         const body = res.body
 
         expect(res.status).toEqual(202)
@@ -116,11 +116,12 @@ describe('APARTMENTS API', () => {
             {
                 field: 'price',
                 value: 2000,
-                operator: '>',
+                operator: '>=',
             },
         ]
         const query = qs.stringify({ filters })
-        const res = await request.get('/apartments/').send(query)
+        console.warn(query)
+        const res = await request.get('/apartments/').query(query)
         const body = res.body
 
         expect(res.status).toEqual(202)
