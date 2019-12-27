@@ -1,6 +1,7 @@
 import supertest from 'supertest'
 import qs from 'qs'
-import { app } from '../index'
+import fs from 'fs'
+import { app } from '../src'
 
 const request = supertest(app)
 
@@ -29,7 +30,63 @@ describe('APARTMENTS API', () => {
         expect(res.status).toEqual(201)
         expect(body.data.message).toBeDefined()
         done()
+    })
+
+    it('should create an apartment with file', async done => {
+        const obj = {
+            price: 100,
+            sqm: 10,
+            title: 'Test Apartment',
+            number_bathrooms: 2,
+            number_bedrooms: 2,
+            coords: { lat: 10, lon: 200 },
+        }
+        const res = await request
+            .post('/apartments')
+            .field('price', obj.price)
+            .field('sqm', obj.sqm)
+            .field('title', obj.title)
+            .field('number_bathrooms', obj.number_bathrooms)
+            .field('number_bedrooms', obj.number_bedrooms)
+            .attach('file', __dirname + '/test.jpg')
+
+        const body = res.body
+
+        expect(res.status).toEqual(201)
+        expect(body.data.message).toBeDefined()
+
+        done()
     }) // timeout is 60s bc internet in venezuela is slow af :( and im using mongo atlas for simplicity
+
+    it('should retrieve an recently created image', async done => {
+        const obj = {
+            price: 100,
+            sqm: 10,
+            title: 'Test Apartment',
+            number_bathrooms: 2,
+            number_bedrooms: 2,
+            coords: { lat: 10, lon: 200 },
+        }
+        const res = await request
+            .post('/apartments')
+            .field('price', obj.price)
+            .field('sqm', obj.sqm)
+            .field('title', obj.title)
+            .field('number_bathrooms', obj.number_bathrooms)
+            .field('number_bedrooms', obj.number_bedrooms)
+            .attach('file', __dirname + '/test.jpg')
+
+        const file = await request.get(
+            `/apartments/images/${res.body.data.apartment._id}/0.jpg`
+        )
+
+        console.log(file)
+
+        expect(file.status).toEqual(200)
+        // expect(file.).toBeDefined()
+
+        done()
+    })
 
     it('should error because of missing argument', async done => {
         const obj = {}
@@ -58,7 +115,7 @@ describe('APARTMENTS API', () => {
         const res = await request.get('/apartments/' + _id)
         const body = res.body
 
-        expect(res.status).toEqual(202)
+        expect(res.status).toEqual(200)
         expect(body.data.apartment).toBeDefined()
         expect(body.data.apartment._id).toEqual(_id)
 
@@ -104,7 +161,7 @@ describe('APARTMENTS API', () => {
         const res = await request.get('/apartments/').query(query)
         const body = res.body
 
-        expect(res.status).toEqual(202)
+        expect(res.status).toEqual(200)
         expect(body.apartments[0].price).toBeGreaterThanOrEqual(100)
         expect(body.apartments[0].price).toBeLessThanOrEqual(800)
 
@@ -124,7 +181,7 @@ describe('APARTMENTS API', () => {
         const res = await request.get('/apartments/').query(query)
         const body = res.body
 
-        expect(res.status).toEqual(202)
+        expect(res.status).toEqual(200)
         expect(body.apartments.length).toBe(0)
 
         done()
