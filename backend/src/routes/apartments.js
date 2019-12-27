@@ -91,7 +91,7 @@ router.get('/', async (req, res) => {
     const { filters } = query
     if (filters) {
         const mongoFilters = filters.reduce((acc, filter) => {
-            const { operator, field, value } = filter
+            const { operator, field, value } = JSON.parse(filter)
             const mongoOperator = resolveOperator(operator)
             return {
                 ...acc,
@@ -101,16 +101,16 @@ router.get('/', async (req, res) => {
                 },
             }
         }, {})
-
+        console.warn(mongoFilters)
         Apartment.find(mongoFilters, (err, apartments) => {
             let response
+            console.warn(apartments)
             if (apartments) {
                 response = responseFactory(200, {
                     apartments,
                 })
             } else if (err) {
-                response = responseFactory(500, {
-                    message: 'Internal Error',
+                response = responseFactory(400, {
                     error: err,
                 })
             }
@@ -140,7 +140,7 @@ router.get('/all', async (req, res) => {
                 apartments,
             })
         } else {
-            response = responseFactory(404, { message: error })
+            response = responseFactory(500, { message: error })
         }
 
         return res.status(response.statusCode).json({ data: response.data })
