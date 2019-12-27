@@ -58,3 +58,9 @@
     flex-grow: 1;
     align-self: flex-end;
 }
+
+@media (min-width: 768px) {
+    .Modal {
+        left: calc(50% - 250px)
+    }
+}
