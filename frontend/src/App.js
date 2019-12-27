@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Header from './Header'
 import Item from './Item'
 import Modal from './Modal'
 import Filter from './Filter'
 import Create from './Create'
+import api from './api'
 
 import './App.css'
 
@@ -14,6 +15,19 @@ function App() {
     const [showFilter, setShowFilter] = useState(false)
     const [showCreate, setShowCreate] = useState(false)
     const [apartments, setApartments] = useState(null)
+    const [load, setLoad] = useState(true)
+
+    useEffect(() => {
+        async function loadApartments() {
+            api.get('/apartments/all').then(res => {
+                setApartments(res.data.data.apartments)
+                setLoad(false)
+            })
+        }
+        if (load) {
+            loadApartments()
+        }
+    }, [load, setApartments])
 
     return (
         <div className="App">
@@ -21,9 +35,8 @@ function App() {
                 value={{
                     showFilter: show => setShowFilter(show),
                     showCreate: show => setShowCreate(show),
-                    filterViewActive: showFilter,
-                    menuViewActive: showCreate,
                     setApartments,
+                    setLoad,
                 }}
             >
                 <Header />
@@ -40,24 +53,19 @@ function App() {
                     {({ close }) => <Create close={close} />}
                 </Modal>
                 <div className="items">
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
+                    {load ? (
+                        'Loading...'
+                    ) : (
+                        <>
+                            {apartments.map(apartment => (
+                                <Item
+                                    {...apartment}
+                                    bedrooms={apartment.number_bedrooms}
+                                    bathrooms={apartment.number_bathrooms}
+                                />
+                            ))}
+                        </>
+                    )}
                 </div>
             </AppContext.Provider>
         </div>

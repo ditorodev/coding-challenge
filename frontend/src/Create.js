@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -9,10 +9,12 @@ import './Modal.css'
 import './form.css'
 import './button.css'
 import './Create.css'
+import { AppContext } from './App'
 
 const Create = ({ close }) => {
     const [loading, setLoading] = useState(false)
     const { register, handleSubmit, watch } = useForm()
+    const { setLoad } = useContext(AppContext)
 
     const onSubmit = values => {
         const data = new FormData()
@@ -46,6 +48,7 @@ const Create = ({ close }) => {
         setLoading(true)
         req.then(_ => {
             setLoading(false)
+            setLoad(true)
             close()
         })
     }

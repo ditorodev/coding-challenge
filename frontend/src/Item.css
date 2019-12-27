@@ -14,17 +14,20 @@
 }
 
 .Item__image {
-    margin: -10px;
     min-width: 100%;
     min-height: 150px;
-    max-height: 90%;
+    max-height: 500px;
     position: relative;
+    overflow: hidden;
+    margin: -10px;
     margin-bottom: 10px;
 }
 
 .Item__image img {
     width: 100%;
-    height: 100%;
+    max-width: 100%;
+    min-height: 500px;
+    max-height: 100%;
     object-fit: cover;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -66,6 +69,33 @@
 
 .Item__property svg {
     margin-right: 5px;
+}
+.Item__arrow {
+    position: absolute;
+    top: 50%;
+    background-color: rgba(255,255,255, 0.6);
+    color: var(--black);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.Item__arrow--left {
+    left: 20px;
+}
+
+.Item__arrow--right {
+    right: 20px;
+}
+
+.Item__image-index {
+    position: absolute;
+    padding: 10px;
+    color: var(--black);
+    background-color: rgba(255,255,255, 0.6);
+    top: 10px;
+    border-radius: 5px;
+    left: calc(50% - 10px);
+    font-weight: bold;
 }
 
 @media (min-width: 768px) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useForm } from 'react-hook-form'
@@ -9,6 +9,7 @@ import './Filter.css'
 import './button.css'
 import './form.css'
 import './Modal.css'
+import { AppContext } from './App'
 
 function buildFilterRequest(values) {
     const array = Object.keys(values).map(key => {
@@ -17,7 +18,7 @@ function buildFilterRequest(values) {
             return Object.keys(current).map(_key => ({
                 field: key,
                 operator: _key === 'max' ? '<=' : '>=',
-                value: current[_key],
+                value: current[_key] === '' ? 0 : current[_key],
             }))
         }
 
@@ -31,6 +32,7 @@ function buildFilterRequest(values) {
 const Filter = ({ close }) => {
     const [loading, setLoading] = useState(false)
     const { register, handleSubmit, watch } = useForm()
+    const { setApartments } = useContext(AppContext)
 
     const onSubmit = values => {
         const data = {
@@ -45,6 +47,16 @@ const Filter = ({ close }) => {
             },
         }
 
+        if (values.minSize === '' && values.maxSize === '') {
+            delete data.sqm
+        }
+        if (values.minPrice === '' && values.maxPrice === '') {
+            delete data.price
+        }
+        if (values.nRooms === '') {
+            delete data.number_bedrooms
+        }
+
         const req = api.get('/apartments', {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -53,9 +65,9 @@ const Filter = ({ close }) => {
         })
         setLoading(true)
 
-        req.then(data => {
+        req.then(res => {
             setLoading(false)
-            // setApartments(data)
+            setApartments(res.data.apartments)
             close()
         })
     }
